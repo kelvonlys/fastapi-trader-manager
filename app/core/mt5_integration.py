@@ -26,6 +26,8 @@ class MT5Integration:
         # Modify order using MT5
         pass
 
+
+
     def close_positions(self):
         # Close all open positions
         pass

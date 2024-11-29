@@ -4,7 +4,6 @@ from fastapi import FastAPI
 from app.core import mt5_integration, market_data
 from app.routers import orders, positions
 
-
 load_dotenv()
 app = FastAPI()
 @app.get("/") 
@@ -16,7 +15,7 @@ async def read_root():
 mt5 = mt5_integration.MT5Integration()
 
 # Initialize market data service
-market_data_service = market_data.MarketDataService()
+#market_data_service = market_data.MarketDataService()
 
 # Include router modules
 app.include_router(orders.router)

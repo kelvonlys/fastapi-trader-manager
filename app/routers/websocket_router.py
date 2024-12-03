@@ -16,7 +16,8 @@ async def websocket_endpoint(websocket: WebSocket, symbol: str):
         try:
             market_data = real_time_market_data.real_time_market_data(symbol)
             async for price in market_data:
-                await websocket.send_json({'type': 'price', 'data': price})
+                if websocket_manager.connections:
+                    await websocket.send_json({'type': 'price', 'data': price})
                 
                 # Check if any connections exist
                 if not websocket_manager.connections:

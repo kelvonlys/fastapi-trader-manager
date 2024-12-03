@@ -7,43 +7,49 @@ class PositionService:
     def __init__(self):
         self.positions = []
 
+    import json
+
     def get_open_positions(self):
-        # Get the current position  
+        # Get all current positions
         self.positions = mt5.positions_get()
+        
         if self.positions:
-            current_position = self.positions[0]  # Assuming only one position
-            print(f"Current position: {current_position}")
+            # Initialize an empty list to store all position data
+            all_positions_data = []
             
-            # Get the symbol info
-            symbol_info = mt5.symbol_info(current_position.symbol) if current_position else None
-
-            # Get the symbol info tick (current price)
-            symbol_tick = mt5.symbol_info_tick(current_position.symbol) if current_position else None
-
-            # Create a dictionary with the required information
-            position_data = {
-                'position_id': current_position.ticket if current_position else None,
-                'symbol': current_position.symbol if current_position else None,
-                #'price': current_position.price_current if current_position else None,
-                'stop_loss': current_position.sl if current_position else None,
-                'profit': current_position.profit if current_position else None,
-                'volume': current_position.volume if current_position else None,
-                'time': current_position.time if current_position else None,
-                'type': current_position.type if current_position else None
-            }
+            # Iterate over each position
+            for position in self.positions:
+                # Create a dictionary with the required information for this position
+                position_data = {
+                    'position_id': position.ticket,
+                    'symbol': position.symbol,
+                    'price': position.price_current,
+                    'stop_loss': position.sl,
+                    'profit': position.profit,
+                    'volume': position.volume,
+                    'time': position.time,
+                    'type': position.type
+                }
+                
+                # Add this position's data to the list
+                all_positions_data.append(position_data)
+                print(f"Position data: {position_data}")
             
-            print(f"Position data: {position_data}")
-
-            # Convert the dictionary to JSON
-            position_json = json.dumps(position_data)
+            # Convert the list of dictionaries to JSON
+            positions_json = json.dumps(all_positions_data)
             
-            return position_json
-            print(position_json)
+            return positions_json
+        else:
+            return "No open positions"
 
     def modify_position(self, position_id: int) -> Dict[str, Any]:
         for pos in self.positions:
             if pos["id"] == position_id:
-                self.positions.remove(pos)
+                # Modify the position data
+                pos["price"] = mt5.symbol_info_tick(pos["symbol"]).price
+                pos["sl"] = mt5.symbol_info_tick(pos["symbol"]).bid - 20  # Example stop loss adjustment
+                pos["tp"] = mt5.symbol_info_tick(pos["symbol"]).ask + 20  # Example take profit adjustment
+                
                 return pos
         raise HTTPException(status_code=404, detail="Position not found")
 

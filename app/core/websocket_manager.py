@@ -85,7 +85,7 @@ class WebSocketManager:
                 await self.connections[conn_id]['websocket'].close()
                 del self.connections[conn_id]
             
-            await asyncio.sleep(60)  # Check every minute
+            await asyncio.sleep(600)  # Check every minute
 
     async def periodic_heartbeat_check(self):
         while True:

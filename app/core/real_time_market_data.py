@@ -16,9 +16,8 @@ class RealTimeMarketData:
                         'ask': tick.ask,
                         'last': tick.last,
                         'volume': tick.volume,
-                        'time_msc': tick.time_msc,
-                        'flags': tick.flags,
-                        'volume_real': tick.volume_real
+                        'volume_real': tick.volume_real,
+                        'day_change_pct': tick.price_change
                     }
                 else:
                     raise ValueError(f"No tick data available for symbol: {symbol}")
@@ -28,7 +27,7 @@ class RealTimeMarketData:
             await asyncio.sleep(interval_seconds)
 
     async def get_current_price(self, symbol):
-        tick = self.mt5.symbol_info_tick(symbol)
+        tick = self.mt5.symbol_info(symbol)
         if tick:
             print(f"Data: {tick}")
             return tick  # Return the complete tick object

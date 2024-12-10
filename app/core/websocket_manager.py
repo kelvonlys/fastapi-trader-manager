@@ -5,7 +5,7 @@ from fastapi import WebSocket, WebSocketDisconnect
 class WebSocketManager:
     def __init__(self):
         self.connections = {}
-        self.timeout_period = 300  # 5 minutes in seconds
+        self.timeout_period = 120  # 2 minutes in seconds
         # Start the periodic cleanup task
         print("Starting periodic cleanup task")
         asyncio.create_task(self.periodic_cleanup())

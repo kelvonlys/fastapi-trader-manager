@@ -62,7 +62,7 @@ A comprehensive trading infrastructure that connects traders with multiple broke
 
 ## Requirements
 
-* Python 3.x for backend
+* Python 3.8 for backend
 * Node.js for frontend
 * Docker (optional)
 * SSL certificates for HTTPS
